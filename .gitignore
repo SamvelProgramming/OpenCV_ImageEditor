@@ -1,0 +1,11 @@
+/build/
+/.cmake/
+*.out
+*.o
+*.a
+*.so
+/.vscode/
+/.idea/
+*.jpg
+*.png
+*.jpeg

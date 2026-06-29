@@ -1,3 +1,0 @@
-/home/gor/Documents/project/PROJECT/build/CMakeFiles/my_program.dir
-/home/gor/Documents/project/PROJECT/build/CMakeFiles/edit_cache.dir
-/home/gor/Documents/project/PROJECT/build/CMakeFiles/rebuild_cache.dir
