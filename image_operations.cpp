@@ -31,7 +31,6 @@ void applyFlip(const cv::Mat& input, cv::Mat& output){
 }
 void applyResize(const cv::Mat& input, cv::Mat& output, double scaleFactor){
     cv::resize(input,output,cv::Size(),scaleFactor,scaleFactor);
-    cv::namedWindow("Resized Image", cv::WINDOW_NORMAL);
     cv::imshow("Resized Image", output);
 }
 void applyCanny(const cv::Mat& input, cv::Mat& output, double threshold1, double threshold2){
