@@ -3,6 +3,7 @@
 #include <string>
 #include "image_operations.h"
 #include <map>
+#include <set>
 #include <filesystem>
 #include <functional>
 
@@ -77,30 +78,37 @@ void Actions(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
              }
          }}};
     auto it = actionMap.find(argv[3]);
-    if (it != actionMap.end())
-    {
-        it->second(input, output, argc, argv);
-        cv::namedWindow(it->first + " Image", cv::WINDOW_NORMAL);
-        cv::imshow(it->first + " Image", output);
-    }
-    else
+
+    if (it == actionMap.end())
     {
         std::cout << "Error: Unknown action." << std::endl;
         return;
     }
+
+    it->second(input, output, argc, argv);
+    cv::namedWindow(it->first + " Image", cv::WINDOW_NORMAL);
+    cv::imshow(it->first + " Image", output);
 }
 
 bool isValidPath(const std::string &path)
 {
     return fs::exists(path);
 }
-bool providePath(std::string &changed_image_directory)
+bool Response()
 {
     std::cout << "Error: The path doesn't exist." << std::endl;
     std::cout << "Do you want to create the directory? (y/n): ";
     char response;
     std::cin >> response;
-    if (response != 'y' && response != 'Y')
+    return (response == 'y' || response == 'Y');
+}
+bool ProvidedPath(std::string &changed_image_directory)
+{
+    // std::cout << "Error: The path doesn't exist." << std::endl;
+    // std::cout << "Do you want to create the directory? (y/n): ";
+    // char response;
+    // std::cin >> response;
+    if (!Response())
     {
         std::cout << "Please provide a valid path for the changed image." << std::endl;
         return false;
@@ -112,11 +120,54 @@ bool providePath(std::string &changed_image_directory)
 
 void printHelp(const std::string &programName)
 {
-    std::cout << "usage: " << programName << " <image path> <changed_image path> <action> <parameters>(if they exist)" << std::endl;
-    std::cout << "actions: grey, rotate90, blur, rotate180, flip, resize, canny, morphology" << std::endl;
+std::cout << "Usage: " << programName << " <image_path> <changed_image_path> <action> <parameters>\n";
+std::cout << "Available Actions & Descriptions:\n\n";
+std::cout << " grey - Converts the image to grayscale (black and white).\n"
+<< " No extra parameters needed.\n\n";
+
+std::cout << " rotate90 - Rotates the image 90 degrees clockwise.\n"
+<< " No extra parameters needed.\n\n";
+
+std::cout << " rotate180 - Rotates the image 180 degrees.\n"
+<< " No extra parameters needed.\n\n";
+
+std::cout << " blur - Blurs the image using a Gaussian filter.\n"
+<< " Parameter: <kernel_size> (Must be an odd number, e.g., 5).\n\n";
+
+std::cout << " flip - Flips the image.\n"
+<< " Parameter: <flip_code> (0: vertical, 1: horizontal, -1: both).\n\n";
+
+std::cout << " resize - Resizes the image to new dimensions.\n"
+<< " Parameters: <width> <height> (e.g., 800 600).\n\n";
+
+std::cout << " canny - Detects edges using the Canny edge detector.\n"
+<< " Parameters: <low_threshold> <high_threshold> (e.g., 50 150).\n\n";
+
+std::cout << " morphology - Applies morphological operations (Erosion/Dilation).\n"
+<< " Parameters: <op_type> <kernel_size>\n"
+<< " (op_type: 0 for Erode, 1 for Dilate; kernel_size: odd number).\n";
 }
+
+bool isValidFileExtension(const std::string &filePath, const std::set<std::string> &validExtensions)
+{
+    std::string extension = fs::path(filePath).extension().string();
+    return validExtensions.find(extension) != validExtensions.end();
+}
+
+void forInvalidFileExtension(const std::set<std::string> &validExtensions)
+{
+    std::cout << "Error: Invalid file extension. Supported extensions are: ";
+    for (const auto &ext : validExtensions)
+    {
+        std::cout << ext << " ";
+    }
+    std::cout << std::endl;
+}
+
 int main(int argc, char **argv)
 {
+
+    std::set<std::string> validFileExtensions = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif"};
 
     if (argc < 4 || argc > 6 || argv[1] == "--help" || argv[1] == "-h")
     {
@@ -126,6 +177,13 @@ int main(int argc, char **argv)
 
     std::string imagePath = argv[1];
 
+    if (!isValidFileExtension(imagePath, validFileExtensions))
+    {
+        forInvalidFileExtension(validFileExtensions);
+        return -1;
+    }
+
+
     if (!isValidPath(imagePath))
     {
         std::cout << "Error: The image path doesn't exist." << std::endl;
@@ -134,13 +192,11 @@ int main(int argc, char **argv)
 
     std::string action = argv[3];
     std::string changed_image_path = argv[2];
+
     std::string changed_image_directory = changed_image_path.substr(0, changed_image_path.rfind('/'));
-    if (!isValidPath(changed_image_directory))
+    if (!isValidPath(changed_image_directory) && !ProvidedPath(changed_image_directory))
     {
-        if (!providePath(changed_image_directory))
-        {
-            return -1;
-        }
+        return -1;
     }
 
     cv::Mat image = cv::imread(imagePath, cv::IMREAD_COLOR);
@@ -162,6 +218,10 @@ int main(int argc, char **argv)
         int pos = changed_image_path.find('.');
         if (changed_image_path[pos - 1] == ')')
         {
+            if(changed_image_path[pos - 2] == '9'){
+                std::cout << "Error: Too many files with the same name. Please choose a different name." << std::endl;
+                return -1;
+            }
             changed_image_path[pos - 2] += 1;
         }
         else
@@ -169,6 +229,7 @@ int main(int argc, char **argv)
             changed_image_path.insert(pos, "(1)");
         }
     }
+
     cv::imwrite(changed_image_path, changed_image);
     cv::waitKey(1000);
     cv::destroyAllWindows();
