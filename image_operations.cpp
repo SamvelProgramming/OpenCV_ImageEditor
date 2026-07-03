@@ -38,3 +38,9 @@ void applyCanny(const cv::Mat& input, cv::Mat& output, double threshold1, double
     cv::namedWindow("Canny Edge Image", cv::WINDOW_NORMAL);
     cv::imshow("Canny Edge Image", output);
 }
+void applyMorphology(const cv::Mat& input, cv::Mat& output, int operation, int kernelSize){
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(kernelSize, kernelSize));
+    cv::morphologyEx(input, output, operation, element);
+    cv::namedWindow("Morphology Image", cv::WINDOW_NORMAL);
+    cv::imshow("Morphology Image", output);
+}
