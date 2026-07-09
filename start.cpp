@@ -10,6 +10,7 @@
 namespace fs = std::filesystem;
 using ActionFunction = std::function<void(const cv::Mat &, cv::Mat &, int, char **)>;
 
+
 void Actions(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
 {
     std::map<std::string, std::function<void(const cv::Mat &, cv::Mat &, int, char **)>> actionMap = {
