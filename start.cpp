@@ -104,10 +104,6 @@ bool Response()
 }
 bool ProvidedPath(std::string &changed_image_directory)
 {
-    // std::cout << "Error: The path doesn't exist." << std::endl;
-    // std::cout << "Do you want to create the directory? (y/n): ";
-    // char response;
-    // std::cin >> response;
     if (!Response())
     {
         std::cout << "Please provide a valid path for the changed image." << std::endl;
