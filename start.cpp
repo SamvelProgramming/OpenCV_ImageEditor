@@ -117,32 +117,25 @@ bool ProvidedPath(std::string &changed_image_directory)
 
 void printHelp(const std::string &programName)
 {
-std::cout << "Usage: " << programName << " <image_path> <changed_image_path> <action> <parameters>\n";
-std::cout << "Available Actions & Descriptions:\n\n";
-std::cout << " grey - Converts the image to grayscale (black and white).\n"
-<< " No extra parameters needed.\n\n";
-
-std::cout << " rotate90 - Rotates the image 90 degrees clockwise.\n"
-<< " No extra parameters needed.\n\n";
-
-std::cout << " rotate180 - Rotates the image 180 degrees.\n"
-<< " No extra parameters needed.\n\n";
-
-std::cout << " blur - Blurs the image using a Gaussian filter.\n"
-<< " Parameter: <kernel_size> (Must be an odd number, e.g., 5).\n\n";
-
-std::cout << " flip - Flips the image.\n"
-<< " Parameter: <flip_code> (0: vertical, 1: horizontal, -1: both).\n\n";
-
-std::cout << " resize - Resizes the image to new dimensions.\n"
-<< " Parameters: <width> <height> (e.g., 800 600).\n\n";
-
-std::cout << " canny - Detects edges using the Canny edge detector.\n"
-<< " Parameters: <low_threshold> <high_threshold> (e.g., 50 150).\n\n";
-
-std::cout << " morphology - Applies morphological operations (Erosion/Dilation).\n"
-<< " Parameters: <op_type> <kernel_size>\n"
-<< " (op_type: 0 for Erode, 1 for Dilate; kernel_size: odd number).\n";
+std::cout << "Usage: " << programName << " <image_path> <changed_image_path> <action> <parameters>\n"
+          << "Available Actions & Descriptions:\n\n"
+          << "  grey        - Converts the image to grayscale (black and white).\n"
+          << "                No extra parameters needed.\n\n"
+          << "  rotate90    - Rotates the image 90 degrees clockwise.\n"
+          << "                No extra parameters needed.\n\n"
+          << "  rotate180   - Rotates the image 180 degrees.\n"
+          << "                No extra parameters needed.\n\n"
+          << "  blur        - Blurs the image using a Gaussian filter.\n"
+          << "                Parameter: <kernel_size> (Must be an odd number, e.g., 5).\n\n"
+          << "  flip        - Flips the image.\n"
+          << "                Parameter: <flip_code> (0: vertical, 1: horizontal, -1: both).\n\n"
+          << "  resize      - Resizes the image to new dimensions.\n"
+          << "                Parameters: <width> <height> (e.g., 800 600).\n\n"
+          << "  canny       - Detects edges using the Canny edge detector.\n"
+          << "                Parameters: <low_threshold> <high_threshold> (e.g., 50 150).\n\n"
+          << "  morphology  - Applies morphological operations (Erosion/Dilation).\n"
+          << "                Parameters: <op_type> <kernel_size>\n"
+          << "                (op_type: 0 for Erode, 1 for Dilate; kernel_size: odd number).\n";
 }
 
 bool isValidFileExtension(const std::string &filePath, const std::set<std::string> &validExtensions)
