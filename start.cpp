@@ -6,7 +6,7 @@
 #include <set>
 #include <filesystem>
 #include <functional>
-
+using namespace OpencvFunctions;
 namespace fs = std::filesystem;
 
 
@@ -171,7 +171,9 @@ int main(int argc, char **argv)
 
     std::set<std::string> validFileExtensions = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif"};
 
-    if (argc < 4 || argc > 6 || argv[1] == "--help" || argv[1] == "-h")
+    std::string helpflag = argv[1];
+
+    if (argc < 4 || argc > 6 || helpflag == "--help" || helpflag == "-h")
     {
         printHelp(argv[0]);
         return -1;
