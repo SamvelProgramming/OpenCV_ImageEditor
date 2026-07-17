@@ -8,12 +8,14 @@
 #include <functional>
 
 namespace fs = std::filesystem;
+
+
 using ActionFunction = std::function<void(const cv::Mat &, cv::Mat &, int, char **)>;
 
 
-void Actions(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
+void actions(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
 {
-    std::map<std::string, std::function<void(const cv::Mat &, cv::Mat &, int, char **)>> actionMap = {
+    std::map<std::string, ActionFunction> actionMap = {
         {"grey", [](const cv::Mat &input, cv::Mat &output, int, char **)
          { applyGrey(input, output); }},
         {"rotate90", [](const cv::Mat &input, cv::Mat &output, int, char **)
@@ -32,7 +34,14 @@ void Actions(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
                  return;
              }
              double scaleFactor = std::stod(argv[4]);
-             applyResize(input, output, scaleFactor);
+             try{
+                 applyResize(input, output, scaleFactor);
+             }
+             catch (const std::invalid_argument &e)
+             {
+                 std::cout << "Error: Invalid scale factor. Please provide a numeric value." << std::endl;
+                 return;
+             }
          }},
         {"canny", [](const cv::Mat &input, cv::Mat &output, int argc, char **argv)
          {
@@ -87,6 +96,10 @@ void Actions(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
     }
 
     it->second(input, output, argc, argv);
+    if(it->first == "resize"){
+        cv::imshow(it->first + " Image", output);
+        return;
+    }
     cv::namedWindow(it->first + " Image", cv::WINDOW_NORMAL);
     cv::imshow(it->first + " Image", output);
 }
@@ -95,7 +108,7 @@ bool isValidPath(const std::string &path)
 {
     return fs::exists(path);
 }
-bool Response()
+bool response()
 {
     std::cout << "Error: The path doesn't exist." << std::endl;
     std::cout << "Do you want to create the directory? (y/n): ";
@@ -103,9 +116,9 @@ bool Response()
     std::cin >> response;
     return (response == 'y' || response == 'Y');
 }
-bool ProvidedPath(std::string &changed_image_directory)
+bool providedPath(std::string &changed_image_directory)
 {
-    if (!Response())
+    if (!response())
     {
         std::cout << "Please provide a valid path for the changed image." << std::endl;
         return false;
@@ -144,14 +157,13 @@ bool isValidFileExtension(const std::string &filePath, const std::set<std::strin
     return validExtensions.find(extension) != validExtensions.end();
 }
 
-void forInvalidFileExtension(const std::set<std::string> &validExtensions)
+void handleInvalidFileExtension(const std::set<std::string> &validExtensions)
 {
     std::cout << "Error: Invalid file extension. Supported extensions are: ";
     for (const auto &ext : validExtensions)
     {
-        std::cout << ext << " ";
+        std::cout << ext << " " << std::endl;
     }
-    std::cout << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -169,7 +181,7 @@ int main(int argc, char **argv)
 
     if (!isValidFileExtension(imagePath, validFileExtensions))
     {
-        forInvalidFileExtension(validFileExtensions);
+        handleInvalidFileExtension(validFileExtensions);
         return -1;
     }
 
@@ -184,7 +196,7 @@ int main(int argc, char **argv)
     std::string changed_image_path = argv[2];
 
     std::string changed_image_directory = changed_image_path.substr(0, changed_image_path.rfind('/'));
-    if (!isValidPath(changed_image_directory) && !ProvidedPath(changed_image_directory))
+    if (!isValidPath(changed_image_directory) && !providedPath(changed_image_directory))
     {
         return -1;
     }
@@ -201,7 +213,7 @@ int main(int argc, char **argv)
     cv::namedWindow("Original Image", cv::WINDOW_NORMAL);
     cv::imshow("Original Image", image);
 
-    Actions(image, changed_image, argc, argv);
+    actions(image, changed_image, argc, argv);
 
     while (isValidPath(changed_image_path))
     {
@@ -218,10 +230,11 @@ int main(int argc, char **argv)
         {
             changed_image_path.insert(pos, "(1)");
         }
+
     }
 
     cv::imwrite(changed_image_path, changed_image);
-    cv::waitKey(1000);
+    cv::waitKey(0);
     cv::destroyAllWindows();
     return 0;
 }
