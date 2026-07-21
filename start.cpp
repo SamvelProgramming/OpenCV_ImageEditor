@@ -14,7 +14,7 @@ using ActionFunction = std::function<void(const cv::Mat &, cv::Mat &, int, char 
 
 void processImageAction(const cv::Mat &input, cv::Mat &output, int argc, char **argv)
 {
-    std::map<std::string, std::function<void(const cv::Mat &, cv::Mat &, int, char **)>> actionMap = {
+    std::map<std::string, ActionFunction> actionMap = {
         {"grey", [](const cv::Mat &input, cv::Mat &output, int, char **)
          { applyGrey(input, output); }},
         {"rotate90", [](const cv::Mat &input, cv::Mat &output, int, char **)
