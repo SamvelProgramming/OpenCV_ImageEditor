@@ -235,10 +235,10 @@ int main(int argc, char **argv)
 
     std::string imagePath = argv[1];
     exitCaseInvalidFileExtension(imagePath);
+    coutCaseInvalidPath(imagePath);
 
     std::string action = argv[3];
     std::string changed_image_path = argv[2];
-    coutCaseInvalidPath(imagePath);
     exitCaseInvalidPath(changed_image_path);
 
 
