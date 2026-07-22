@@ -191,7 +191,7 @@ void exitCaseInvalidPath(const std::string &changed_image_path)
         exit(-1);
     }
 }
-void forDublicateFileName(std::string &changed_image_path)
+void handleDublicateFileName(std::string &changed_image_path)
 {
     while (isValidPath(changed_image_path))
     {
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 
     processImageAction(image, changed_image, argc, argv);
 
-    forDublicateFileName(changed_image_path);
+    handleDublicateFileName(changed_image_path);
 
     cv::imwrite(changed_image_path, changed_image);
     cv::waitKey(1000);
