@@ -38,4 +38,4 @@ Usage
 
 ./image_processor <input_path> <output_path> [options]
 
- **[Team 2 Presentation on Prezi](https://prezi.com/craft/room/f-mcm4rhirk-?referral_token=lfccoClnB3FN)**
+ **[Team 2 Presentation on Prezi](https://prezi.com/view/DZLCWydNxKAEmezSNen8/?referral_token=lfccoClnB3FN)**
