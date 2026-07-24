@@ -1,7 +1,7 @@
+#include "image_operations.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
-#include "image_operations.h"
 #include <map>
 #include <set>
 #include <filesystem>
