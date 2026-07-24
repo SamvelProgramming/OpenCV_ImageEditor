@@ -1,3 +1,4 @@
+#include "utils.h"
 #include <gtest/gtest.h>
 #include "image_operations.h"
 #include <opencv2/opencv.hpp>
@@ -137,7 +138,7 @@ TEST(isValidFileExtensionTest, ValidExtensions)
 
 
 
- 
+
 
 TEST(BlurTest, AppliesBlurSuccessfully)
 {

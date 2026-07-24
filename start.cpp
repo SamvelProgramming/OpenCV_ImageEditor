@@ -1,4 +1,5 @@
 #include "image_operations.h"
+#include "utils.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>

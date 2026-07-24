@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(IMAGE_REDACT)
 
 find_package(OpenCV REQUIRED)
-add_executable(my_program start.cpp image_operations.cpp )
+
+add_executable(my_program start.cpp image_operations.cpp utils.cpp)
 
 target_link_libraries(my_program PRIVATE ${OpenCV_LIBS}) 
 
@@ -10,7 +11,7 @@ enable_testing()  #Enable testing for the project
 
 find_package(GTest REQUIRED) #Find the GTest package
 
-add_executable(image_redactor_tests test.cpp image_operations.cpp) #Create a test executable
+add_executable(image_redactor_tests test.cpp image_operations.cpp utils.cpp) #Create a test executable
 
 target_link_libraries(image_redactor_tests 
     PRIVATE
